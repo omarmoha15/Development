@@ -1,6 +1,7 @@
 
 import Link from 'next/link';
 import React, { useState } from 'react'
+import Image from 'next/image'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import logo from './v16_193.png'
@@ -9,6 +10,8 @@ export default function Register() {
   return (
     <>
     <section className="bg-gradient-to-t from-white via-white to-teal-200 h-full w-full text-center rtl-grid">
+    <Image  src={logo} width={130} height={130} alt="Logo" className="absolute top-0 left-7 m-4 w-28 h-30" />
+
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
             <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-indigo-50 dark:border-indigo-700">
                 <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
