@@ -1,7 +1,9 @@
 import React from 'react'
 
-export default function page() {
+function employeeInfo() {
   return (
     <div>page</div>
   )
 }
+
+export default employeeInfo
