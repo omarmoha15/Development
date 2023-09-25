@@ -105,7 +105,7 @@ const Emp_en = (props) => {
         >  <CIcon icon={cilPrint} size="xl" />
         </CButton>
         <br />
-        <div style={{ boxSizing: 'border-box', fontSize: '14px', direction: 'ltr' }}>
+        <div className={{ boxSizing: 'border-box', fontSize: '14px', direction: 'ltr' }}>
           <div
             style={{
               boxSizing: 'border-box',
