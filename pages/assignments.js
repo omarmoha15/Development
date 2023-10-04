@@ -1,8 +1,8 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 // 'use client'
 import { MultstepContext } from '@/components/aassignments/MultstepContext';
 import Account from '@/components/aassignments/steps/Account';
 import Details from '@/components/aassignments/steps/Details';
-import Payment from '@/components/aassignments/steps/Payment';
 import Final from '@/components/aassignments/steps/Final';
 
 
@@ -21,9 +21,9 @@ export default function assignments() {
     const [FinalData, setFinalData] = useState([])
 
 const steps =[
-    'Account Information',
-    'Personal Details',
-    'Complete'
+    'معلومات الموظف',
+    'تفاصيل الانتداب ',
+    'تأكيد'
 ];
 
 const displayStep =(step)=>{

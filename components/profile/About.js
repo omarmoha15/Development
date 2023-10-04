@@ -15,14 +15,14 @@ function About() {
       </div>
     </div>
 
-    <div class="space-x-8 flex justify-between mt-32 md:mt-0 md:justify-center">
+    {/* <div class="space-x-8 flex justify-between mt-32 md:mt-0 md:justify-center">
 <button
   class="text-white py-2 px-4 uppercase rounded bg-blue-400 hover:bg-blue-500 shadow hover:shadow-lg font-medium transition transform hover:-translate-y-0.5"
 >
   Print,PDF
 </button>
 
-    </div>
+    </div> */}
   </div>
 
   <div class="mt-20 text-center  border-b pb-12">
@@ -109,15 +109,15 @@ function About() {
                     <div className="grid md:grid-cols-2 text-sm">
                       <div className="grid grid-cols-2">
                         <div className="px-4 py-2 font-semibold">الاسم الاول</div>
-                        <div className="px-4 py-2">Jane</div>
+                        <div className="px-4 py-2">عمر</div>
                       </div>
                       <div className="grid grid-cols-2">
                         <div className="px-4 py-2 font-semibold"> الاسم الاخير</div>
-                        <div className="px-4 py-2">Doe</div>
+                        <div className="px-4 py-2">سعيد</div>
                       </div>
                       <div className="grid grid-cols-2">
                         <div className="px-4 py-2 font-semibold">الجنس</div>
-                        <div className="px-4 py-2">Female</div>
+                        <div className="px-4 py-2">ذكر</div>
                       </div>
                       <div className="grid grid-cols-2">
                         <div className="px-4 py-2 font-semibold"> رقم الهاتف.</div>
@@ -129,12 +129,12 @@ function About() {
                       </div>
                       <div className="grid grid-cols-2">
                         <div className="px-4 py-2 font-semibold"> العنوان</div>
-                        <div className="px-4 py-2">Arlington Heights, IL, Illinois</div>
+                        <div className="px-4 py-2">ابها, امارة منطقة عسير</div>
                       </div>
                       <div className="grid grid-cols-2">
                         <div className="px-4 py-2 font-semibold">البريد الالكتروني</div>
                         <div className="px-4 py-2">
-                          <a className="text-blue-800" href="mailto:jane@example.com">jane@example.com</a>
+                          <a className="text-blue-800" href="mailto:jane@example.com">example@example.com</a>
                         </div>
                       </div>
                       <div className="grid grid-cols-2">

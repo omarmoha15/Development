@@ -2,41 +2,35 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Link from 'next/link';
-
-// Import Axios
 import axios from 'axios';
-
-// Media Import
 import logo from '../public/v16_193.png';
 
 export default function Login() {
   const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState(null); // State variable for error message
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage(null); // Reset error message
 
-    // Get the form data
     const identity = e.target.identity.value;
     const password = e.target.password.value;
 
     try {
-      // Make a POST request to your API
       const response = await axios.post('http://10.0.0.215:7000/api/login', {
         identity,
         password,
       });
 
-      // Handle the response, e.g., redirect on success
       if (response.status === 200) {
-        // Redirect or perform any other action you need
-        router.push('/about');
+        router.push('/employerIfo');
       } else {
         // Handle other response statuses or errors
-        console.error('Login failed');
+        setErrorMessage('Wrong password. Please try again.'); // Set error message
       }
     } catch (error) {
-      // Handle network errors or other exceptions
       console.error('Error:', error);
+      setErrorMessage('الرجاء التأكد من رقم الهوية او كلمة المرور'); // Set error message for network errors
     }
   };
 
@@ -94,7 +88,7 @@ export default function Login() {
                     className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
                   />
                   <label htmlFor="remember-me" className="ml-3 block text-sm leading-6 text-gray-900">
-                    Remember me
+                    تذكرني
                   </label>
                 </div>
               </div>
@@ -104,7 +98,7 @@ export default function Login() {
                   type="submit"
                   className="flex w-full justify-center rounded-md bg-gradient-to-r from-green-400 via-green-500 to-green-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
-                  Sign in
+                   دخول 
                 </button>
               </div>
             </form>
@@ -112,6 +106,7 @@ export default function Login() {
                ليس لديك حساب ؟ <Link href="/register" className="text-sm font-light text-indigo-500 hover:underline dark:text-primary-500">انشاء حساب</Link>
              </p>
             
+            <div className="text-red-500 text-center mt-2">{errorMessage}</div> {/* Error message */}
           </div>
         </div>
       </div>

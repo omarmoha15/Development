@@ -1,3 +1,5 @@
+
+
 // next.config.js
 
 module.exports = {
@@ -12,4 +14,5 @@ module.exports = {
       },
     ];
   },
+  
 };

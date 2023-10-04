@@ -1,18 +1,19 @@
-import React, {Fragment, useState } from 'react';
-import { Dialog, Menu, Transition } from '@headlessui/react'
-
+import React, { Fragment, useState } from 'react';
+import { useRouter } from 'next/router';
+import { Dialog, Menu, Transition } from '@headlessui/react';
+import Image from 'next/image';
 import {
   Bars3Icon,
   BellIcon,
   CalendarIcon,
   ChartPieIcon,
-  Cog6ToothIcon,
-  CubeIcon,
   DocumentDuplicateIcon,
   HomeIcon,
+  CubeIcon,
   UserIcon,
 } from '@heroicons/react/24/outline';
-import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid';
+import logo from '../public/logo-white.svg';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -20,135 +21,287 @@ function classNames(...classes) {
 
 export default function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(null); // New state for dropdown menu
+  const router = useRouter();
 
-  const navigation = [
-    { name: 'بياناتي الشخصية ', href: '/employerIfo', icon: HomeIcon, current: true },
-    { name: 'المستندات والمشاهد', href: '/employerDoc', icon: DocumentDuplicateIcon, current: false },
-    { name: 'انتداباتي', href: '/assignments', icon: CubeIcon, current: false },
-    { name: 'الحضور والغياب', href: '/employeeAtt', icon: CalendarIcon, current: false },
-    { name: 'التقيم الوظيفي', href: '/employeeRate', icon: UserIcon, current: false },
-    { name: 'التقارير', href: '/employeeReport', icon: ChartPieIcon, current: false },
-  ];
+  const handleLogout = () => {
+    // Clear the user's authentication data (you can adjust this based on your authentication method)
+    localStorage.removeItem('authToken'); // Assuming you're using localStorage for authentication
 
-  const teams = [
-    { name: 'Team A', href: '/teamA', initial: 'A', current: true },
-    { name: 'Team B', href: '/teamB', initial: 'B', current: false },
-    // Add more teams as needed
-  ];
-  
-  const userNavigation = [
-    { name: 'Your profile', href: '/about', },
-    { name: 'Sign out', href: '/login' },
-  ]
-
-
-  const handleLogout = async () => {
-    try {
-      // Make a POST request to your logout API
-      await axios.post('http://10.0.0.215:7000/api/logout');
-
-      // Redirect the user to the login page or any other desired page
-      router.push('/login');
-    } catch (error) {
-      console.error('Logout failed:', error);
-    }
+    // Redirect the user to the login page
+    router.push('/login');
   };
 
-  return (
-    <div>
-      
+  const navigation = [
+    { name: 'بياناتي الشخصية', href: '/employerIfo', icon: HomeIcon, current: router.pathname === '/employerIfo' },
+    
+    {
+      name: 'انتداباتي ',
+      icon: ChartPieIcon,
+      isOpen: dropdownOpen === 'assignments', // Track the open/closed state for this dropdown
+      // Use the 'setDropdownOpen' function to toggle the dropdown
+      onClick: () => setDropdownOpen(dropdownOpen === 'assignments' ? null : 'assignments'),
+      subItems: [
+        { name: 'تقديم انتداب', href: '/assignments' },
+        { name: 'انتداباتي', href: '/eRate' },
+      ],
+    },
+    {
+      name: '  اجازاتي ',
+      icon: ChartPieIcon,
+      isOpen: dropdownOpen === 'calendarVacations', // Track the open/closed state for this dropdown
+      // Use the 'setDropdownOpen' function to toggle the dropdown
+      onClick: () => setDropdownOpen(dropdownOpen === 'calendarVacations' ? null : 'calendarVacations'),
+      subItems: [
+        { name: 'تقديم إجازة', href: '/employerCalendar' },
+        { name: 'اجازاتي', href: '/employerVacations' },
+        { name: 'رصيدي', href: '/employerVacations' },
+      ],
+    },
+    {
+      name: 'التقيم الوظيفي ',
+      icon: ChartPieIcon,
+      isOpen: dropdownOpen === 'evaluation', // Track the open/closed state for this dropdown
+      // Use the 'setDropdownOpen' function to toggle the dropdown
+      onClick: () => setDropdownOpen(dropdownOpen === 'evaluation' ? null : 'evaluation'),
+      subItems: [
+        { name: 'تقديم تقيم', href: '/employerRate' },
+        { name: 'تقيماتي', href: '/eRate' },
+      ],
+    },
+    {
+      name: 'الوثائق الرسمية',
+      icon: ChartPieIcon,
+      isOpen: dropdownOpen === 'officialDocuments', // Track the open/closed state for this dropdown
+      // Use the 'setDropdownOpen' function to toggle the dropdown
+      onClick: () => setDropdownOpen(dropdownOpen === 'officialDocuments' ? null : 'officialDocuments'),
+      subItems: [
+        { name: 'تعريف الراتب "عربي"', href: '/employerDoc' },
+        { name: 'تعريف الراتب "انجليزي"', href: '/employerDoc' },
+        { name: 'تعريف راتب لجهة مخصصه', href: '/employerDoc' },
+        { name: 'بيان الخدمة', href: '/employerDoc' },
+        { name: 'التقارير الطبية من صحتي', href: '/employerDoc' },
+      ],
+    },
+    { name: 'الحضور والغياب', href: '/employeeAtt', icon: CalendarIcon, current: router.pathname === '/employeeAtt' },
+    {
+      name: 'التدريب',
+      icon: ChartPieIcon,
+      isOpen: dropdownOpen === 'training', // Track the open/closed state for this dropdown
+      // Use the 'setDropdownOpen' function to toggle the dropdown
+      onClick: () => setDropdownOpen(dropdownOpen === 'training' ? null : 'training'),
+      subItems: [
+        { name: 'سجلي التدريبي', href: '/employeeAtt' },
+        { name: 'رفع طلب اضافة دورة', href: '/employeeAtt' },
+        { name: 'رفع طلب ابتعاث', href: '/employeeAtt' },
+        { name: 'طلب تسجيل في دورات', href: '/employeeAtt' },
+      ],
+    },
+    {
+      name: 'التقاعد ',
+      icon: ChartPieIcon,
+      isOpen: dropdownOpen === 'retirement', // Track the open/closed state for this dropdown
+      // Use the 'setDropdownOpen' function to toggle the dropdown
+      onClick: () => setDropdownOpen(dropdownOpen === 'retirement' ? null : 'retirement'),
+      subItems: [
+        { name: 'رفع طلب استقالة واخلاء طرف', href: '/employeeAtt' },
+        { name: 'رفع طلب تقاعد مبكر واخلاء طرف', href: '/employeeAtt' },
+        { name: 'رفع طلب تقاعد واخلاء طرف', href: '/employeeAtt' },
+      ],
+    },
+    {
+      name: 'طلباتي',
+      icon: ChartPieIcon,
+      isOpen: dropdownOpen === 'hrRequests', // Track the open/closed state for this dropdown
+      // Use the 'setDropdownOpen' function to toggle the dropdown
+      onClick: () => setDropdownOpen(dropdownOpen === 'hrRequests' ? null : 'hrRequests'),
+      subItems: [
+        { name: 'رفع طلب تصحيح بيانات', href: '/employeeAtt' },
+        { name: 'رفع طلب اخر', href: '/employeeAtt' },
+      ],
+    },
+    {
+      name: 'القرارات ',
+      icon: ChartPieIcon,
+      isOpen: dropdownOpen === 'decisions', // Track the open/closed state for this dropdown
+      // Use the 'setDropdownOpen' function to toggle the dropdown
+      onClick: () => setDropdownOpen(dropdownOpen === 'decisions' ? null : 'decisions'),
+      subItems: [
+        { name: 'قرارات العقوبات', href: '/employeeAtt' },
+        { name: 'قرارات اخرى', href: '/employeeAtt' },
+      ],
+    },
+    {
+      name: 'التواصل الداخلي ',
+      icon: ChartPieIcon,
+      isOpen: dropdownOpen === 'internalCommunication', // Track the open/closed state for this dropdown
+      // Use the 'setDropdownOpen' function to toggle the dropdown
+      onClick: () => setDropdownOpen(dropdownOpen === 'internalCommunication' ? null : 'internalCommunication'),
+      subItems: [
+        { name: 'اعلانات الموارد البشرية', href: '/employeeAtt' },
+        { name: 'برنامج الخصومات ولاء', href: '/employeeAtt' },
+      ],
+    },
+    {
+      name: 'الترقيات',
+      icon: ChartPieIcon,
+      isOpen: dropdownOpen === 'promotions', // Track the open/closed state for this dropdown
+      // Use the 'setDropdownOpen' function to toggle the dropdown
+      onClick: () => setDropdownOpen(dropdownOpen === 'promotions' ? null : 'promotions'),
+      subItems: [
+        { name: 'التسجيل في محضر الترقية', href: '/employeeAtt' },
+        { name: 'سجل الترقيات', href: '/employeeAtt' },
+        { name: 'طلب ترقية استثنائية', href: '/employeeAtt' },
+      ],
+    },
+  ];
 
-        {/* Static sidebar for desktop */}
-        <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
-          {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 pb-4">
-            <div className="flex h-16 shrink-0 items-center">
-              <img
-                className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=white"
-                alt="Your Company"
-              />
-            </div>
-            <nav className="flex flex-1 flex-col">
-              <ul role="list" className="flex flex-1 flex-col gap-y-7">
-                <li>
-                  <ul role="list" className="-mx-2 space-y-1">
-                    {navigation.map((item) => (
-                      <li key={item.name}>
-                        <a
-                          href={item.href}
-                          className={classNames(
-                            item.current
-                              ? 'bg-indigo-700 text-white'
-                              : 'text-indigo-200 hover:text-white hover:bg-indigo-700',
-                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                          )}
-                        >
-                          <item.icon
+  const userNavigation = [
+    { name: 'تسجيل الخروج', onClick: handleLogout },
+    { name: 'ملفي الشخصي', href: '/employerIfo' },
+  ];
+
+  return (
+    <div dir="rtl" className="flex">
+      {/* Sidebar */}
+      <aside className={`lg:flex lg:flex-col bg-gray-900 text-white w-72 ${sidebarOpen ? '' : 'hidden'}`}>
+        <div className="h-16 flex items-center justify-center">
+          <Image
+            className="h-20 w-auto"
+            src={logo}
+            alt="Your Company"
+          />
+        </div>
+        <nav className="flex-1 flex flex-col mt-4">
+          <ul role="list" className="flex-1 space-y-4">
+            {navigation.map((item) => (
+              <li key={item.name}>
+                {/* Main Item */}
+                {item.subItems ? (
+                  <div>
+                    <a
+                      href="#"
+                      className={classNames(
+                        item.current
+                          ? 'bg-indigo-700 text-white'
+                          : 'text-indigo-200 hover:text-white hover:bg-indigo-700',
+                        'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                      )}
+                      onClick={() => setDropdownOpen(item.name === dropdownOpen ? null : item.name)}
+                    >
+                      <item.icon
+                        className={classNames(
+                          item.current ? 'text-white' : 'text-indigo-200 group-hover:text-white',
+                          'h-6 w-6'
+                        )}
+                        aria-hidden="true"
+                      />
+                      {item.name}
+                      <ChevronDownIcon className="ml-auto h-5 w-5 text-gray-400 group-hover:text-white" aria-hidden="true" />
+                    </a>
+                    {/* Sub-Items */}
+                    <ul className={`ml-5 mt-1 space-y-1 ${item.name === dropdownOpen ? '' : 'hidden'}`}>
+                      {item.subItems.map((subItem) => (
+                        <li key={subItem.name}>
+                          <a
+                            href={subItem.href}
                             className={classNames(
-                              item.current ? 'text-white' : 'text-indigo-200 group-hover:text-white',
-                              'h-6 w-6 shrink-0'
+                              subItem.current ? 'text-indigo-700' : 'text-indigo-200 hover:text-indigo-700',
+                              'block px-2 py-1 text-sm leading-5'
                             )}
-                            aria-hidden="true"
-                          />
-                          {item.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-                <li>
-                  <div className="text-xs font-semibold leading-6 text-indigo-200">Your teams</div>
-                  <ul role="list" className="-mx-2 mt-2 space-y-1">
-                    {teams.map((team) => (
-                      <li key={team.name}>
-                        <a
-                          href={team.href}
-                          className={classNames(
-                            team.current
-                              ? 'bg-indigo-700 text-white'
-                              : 'text-indigo-200 hover:text-white hover:bg-indigo-700',
-                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                          )}
-                        >
-                          <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-indigo-400 bg-indigo-500 text-[0.625rem] font-medium text-white">
-                            {team.initial}
-                          </span>
-                          <span className="truncate">{team.name}</span>
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-                <li className="mt-auto">
+                          >
+                            {subItem.name}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : (
+                  // Regular Item
                   <a
-                    href="#"
-                    className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-indigo-200 hover:bg-indigo-700 hover:text-white"
+                    href={item.href}
+                    className={classNames(
+                      item.current ? 'bg-indigo-700 text-white' : 'text-indigo-200 hover:text-white hover:bg-indigo-700',
+                      'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                    )}
                   >
-                    <Cog6ToothIcon
-                      className="h-6 w-6 shrink-0 text-indigo-200 group-hover:text-white"
+                    <item.icon
+                      className={classNames(
+                        item.current ? 'text-white' : 'text-indigo-200 group-hover:text-white',
+                        'h-6 w-6'
+                      )}
                       aria-hidden="true"
                     />
-                    الاعدادات
+                    {item.name}
                   </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
+                )}
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </aside>
 
-        <div className="lg:pl-72">
-          <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
-            <button type="button" className="-m-2.5 p-2.5 text-gray-700 lg:hidden" onClick={() => setSidebarOpen(true)}>
-              <span className="sr-only">Open sidebar</span>
-              <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-            </button>
+      {/* Content */}
+      <div className="flex-1 min-h-screen">
+        <header className="bg-white shadow-sm sticky top-0 z-40 flex flex-row justify-between px-4 sm:px-6 lg:px-8">
+          <button
+            type="button"
+            className="p-2.5 text-gray-700 lg:hidden"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+          >
+            <span className="sr-only">Open sidebar</span>
+            <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+          </button>
 
-            {/* Separator */}
-            <div className="h-6 w-px bg-gray-900/10 lg:hidden" aria-hidden="true" />
-
-            <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
-              <form className="relative flex flex-1" action="#" method="GET">
+          <div className="flex items-center gap-x-4 lg:gap-x-6 ml-4"> {/* Moved ml-4 */}
+            <div className="flex items-center gap-x-4 lg:gap-x-6">
+              {/* Profile dropdown */}
+              <Menu as="div" className="relative">
+                <Menu.Button className="flex items-center p-1.5">
+                  <span className="sr-only">Open user menu</span>
+                  <img
+                    className="h-8 w-8 rounded-full bg-gray-50"
+                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                    alt=""
+                  />
+                  <span className="hidden lg:flex lg:items-center">
+                    <span className="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">
+                      عمر محمد
+                    </span>
+                    <ChevronDownIcon className="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
+                  </span>
+                </Menu.Button>
+                <Transition
+                  as={Fragment}
+                  enter="transition ease-out duration-100"
+                  enterFrom="transform opacity-0 scale-95"
+                  enterTo="transform opacity-100 scale-100"
+                  leave="transition ease-in duration-75"
+                  leaveFrom="transform opacity-100 scale-100"
+                  leaveTo="transform opacity-0 scale-95"
+                >
+                  <Menu.Items className=" absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none  ">
+                    {userNavigation.map((item) => (
+                      <Menu.Item key={item.name}>
+                        {({ active }) => (
+                          <a
+                            href={item.href}
+                            className={classNames(
+                              active ? 'bg-gray-50' : '',
+                              'block px-3 py-1 text-sm leading-6 text-gray-900'
+                            )}
+                          >
+                            {item.name}
+                          </a>
+                        )}
+                      </Menu.Item>
+                    ))}
+                  </Menu.Items>
+                </Transition>
+              </Menu>
+              
+              {/* Search */}
+              <form className="relative flex-1" action="#" method="GET">
                 <label htmlFor="search-field" className="sr-only">
                   البحث
                 </label>
@@ -164,74 +317,21 @@ export default function Layout({ children }) {
                   name="search"
                 />
               </form>
-              <div className="flex items-center gap-x-4 lg:gap-x-6">
-                <button type="button" className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
-                  <span className="sr-only">عرض الاشعارات </span>
-                  <BellIcon className="h-6 w-6" aria-hidden="true" />
-                </button>
-
-                {/* Separator */}
-                <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10" aria-hidden="true" />
-
-                {/* Profile dropdown */}
-                <Menu as="div" className="relative">
-                  <Menu.Button className="-m-1.5 flex items-center p-1.5">
-                    <span className="sr-only">Open user menu</span>
-                    <img
-                      className="h-8 w-8 rounded-full bg-gray-50"
-                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                      alt=""
-                    />
-                    <span className="hidden lg:flex lg:items-center">
-                      <span className="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">
-                        Tom Cook
-                      </span>
-                      <ChevronDownIcon className="ml-2 h-5 w-5 text-gray-400" aria-hidden="true" />
-                    </span>
-                  </Menu.Button>
-                  <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
-                  >
-                    <Menu.Items className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
-                      {userNavigation.map((item) => (
-                        <Menu.Item key={item.name}>
-                          {({ active }) => (
-                            <a
-                              href={item.href}
-                              className={classNames(
-                                active ? 'bg-gray-50' : '',
-                                'block px-3 py-1 text-sm leading-6 text-gray-900'
-                              )}
-                            >
-                              {item.name}
-                            </a>
-                          )}
-                        </Menu.Item>
-                      ))}
-                    </Menu.Items>
-                  </Transition>
-                </Menu>
-              </div>
             </div>
-          </div>
+            
+            <button type="button" className="p-2.5 text-gray-400 hover:text-gray-500 lg:hidden">
+              <span className="sr-only">عرض الاشعارات</span>
+              <BellIcon className="h-6 w-6" aria-hidden="true" />
+            </button>
 
-          <main className="py-10">
-            <div className="px-4 sm:px-6 lg:px-8">{children}</div>
-          </main>
-        </div>
+            <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10 " aria-hidden="true" />
+          </div>
+        </header>
+
+        <main className="py-10 px-4 sm:px-6 lg:px-8">
+          {children}
+        </main>
       </div>
+    </div>
   );
 }
-
-
-
-
-
-
-

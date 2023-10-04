@@ -1,8 +1,10 @@
+
 // pages/_app.js
 
 import { useRouter } from 'next/router';
 import '../styles/globals.css';
 import Layout from '../components/layout';
+
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();

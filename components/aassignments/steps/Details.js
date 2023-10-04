@@ -29,11 +29,11 @@ export default function Details  () {
 
   return (
     <div className="border-b border-gray-900/10 pb-12">
-    <h2 className="text-base font-semibold leading-7 text-gray-900">بيانات وجهة الانتداب </h2>
+    <h2 className="text-base font-semibold leading-7 text-gray-900 text-right">بيانات وجهة الانتداب </h2>
    
 
-    <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-      <div className="sm:col-span-2 sm:col-start-1">
+    <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 text-right">
+      <div className="sm:col-span-3 sm:col-start-1">
         <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
           رقم خطاب التغطية
         </label>
@@ -103,7 +103,7 @@ export default function Details  () {
 
       <div className="sm:col-span-3">
       <label htmlFor="country" className="block text-sm font-medium leading-6 text-gray-900">
-        Select an option:
+       تكلفة السفر:
       </label>
       <select
         id="country"
@@ -134,7 +134,7 @@ export default function Details  () {
 
             <div className="sm:col-span-3">
             <label htmlFor="country" className="block text-sm font-medium leading-6 text-gray-900">
-        Select an option:
+        تكلفة السكن:
       </label>
       <select
         id="country"
@@ -165,7 +165,7 @@ export default function Details  () {
 
             <div className="sm:col-span-3">
             <label htmlFor="country" className="block text-sm font-medium leading-6 text-gray-900">
-        Select an option:
+       تكلفة المواصلات:
       </label>
       <select
         id="country"
@@ -195,7 +195,7 @@ export default function Details  () {
     </div>
             <div className="sm:col-span-3">
                <label htmlFor="country" className="block text-sm font-medium leading-6 text-gray-900">
-        Select an option:
+       تكلفة الطعام:
       </label>
       <select
         id="country"
@@ -211,7 +211,7 @@ export default function Details  () {
       </select>
 
       {showTextArea && (
-        <div className="mt-2">
+        <div className="mt-2 ">
           <label htmlFor="text-area" className="block text-sm font-medium leading-6 text-gray-900">
             Text Area:
           </label>
@@ -226,8 +226,8 @@ export default function Details  () {
 
 
     <div className="col-span-full">
-              <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
-                Cover photo
+              <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900 text-right">
+                نسخة pdf خطاب التغطية
               </label>
               <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-0.1">
                 <div className="text-center">
@@ -250,7 +250,7 @@ export default function Details  () {
 
               <div className="col-span-full">
               <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
-                Cover photo
+               نسخة pdf  من مشهد من جهة الوصول
               </label>
               <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-0.1">
                 <div className="text-center">
@@ -273,7 +273,7 @@ export default function Details  () {
 
               <div className="col-span-full">
               <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
-                Cover photo
+                نسخة pdf  امر التكليف 
               </label>
               <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-0.1">
                 <div className="text-center">
@@ -295,7 +295,7 @@ export default function Details  () {
 
               <div className="col-span-full">
               <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
-                Cover photo
+                نسخة pdf  موافقة سمو أمير المنطقة ان وجود
               </label>
               <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-0.1">
                 <div className="text-center">
